@@ -5,7 +5,7 @@
 # Environment variables (contains API keys, OAuth secrets, tokens)
 .env
 .env.*
-!.env.example
+.env.example
 
 # OAuth / credential files
 **/client_secret*.json

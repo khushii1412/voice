@@ -3,9 +3,9 @@
 # ========================================
 
 # Environment variables (contains API keys, OAuth secrets, tokens)
-.env
-.env.*
-.env.example
+**/.env
+**/.env.*
+**/.env.example
 
 # OAuth / credential files
 **/client_secret*.json
@@ -21,8 +21,6 @@
 # ========================================
 # Config / Project files
 # ========================================
-package.json
-package-lock.json
 tsconfig.json
 
 # ========================================

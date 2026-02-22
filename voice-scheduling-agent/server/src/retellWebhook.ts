@@ -5,7 +5,9 @@ const router = Router();
 
 router.post("/retell/tool", async (req: Request, res: Response) => {
     try {
-        console.log("Retell webhook received:", JSON.stringify(req.body, null, 2));
+        console.log(`[${new Date().toISOString()}] Incoming Retell Tool Call`);
+        console.log("Headers:", JSON.stringify(req.headers, null, 2));
+        console.log("Body:", JSON.stringify(req.body, null, 2));
 
         const body = req.body || {};
 
@@ -16,9 +18,13 @@ router.post("/retell/tool", async (req: Request, res: Response) => {
             body?.arguments ||
             body?.args ||
             body?.toolCall?.arguments ||
+            body?.tool_call?.arguments ||
             body; // args-only fallback
 
+        console.log("Extracted Args:", JSON.stringify(args, null, 2));
+
         if (!args?.name || !args?.date || !args?.time) {
+            console.warn("Validation failed: Missing name, date, or time in args");
             return res.status(400).json({
                 ok: false,
                 error: { message: "Missing required fields (name, date, time)" }
@@ -29,6 +35,7 @@ router.post("/retell/tool", async (req: Request, res: Response) => {
             name: String(args.name),
             date: String(args.date),
             time: String(args.time),
+            phoneNumber: args.phone_number || args.phoneNumber || args.phone || undefined,
             title: args.title ? String(args.title) : undefined,
             timezone: args.timezone ? String(args.timezone) : undefined
         });

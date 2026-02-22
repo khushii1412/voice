@@ -5,6 +5,7 @@ export type CreateEventInput = {
     name: string;
     date: string;
     time: string;
+    phoneNumber?: string;
     title?: string;
     timezone?: string;
 };
@@ -52,7 +53,10 @@ export async function createEvent(input: CreateEventInput) {
 
     const summary = input.title?.trim() ? input.title.trim() : `Meeting with ${input.name}`;
 
-    const description = `Booked via Voice Scheduling Agent.\nName: ${input.name}`;
+    let description = `Booked via Voice Scheduling Agent.\nName: ${input.name}`;
+    if (input.phoneNumber) {
+        description += `\nPhone: ${input.phoneNumber}`;
+    }
 
     const resp = await calendar.events.insert({
         calendarId,

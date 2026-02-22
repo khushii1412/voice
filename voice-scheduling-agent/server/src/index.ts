@@ -77,6 +77,8 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
     res.status(500).json({ ok: false, error: { message: "Internal Server Error" } });
 });
 
+const PORT = Number(process.env.PORT || 3000);
+
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server listening on port ${PORT}`);
 });

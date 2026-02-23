@@ -87,7 +87,10 @@
         <p>&copy; 2026 Jordan AI · Built for Khushi's Workspace Deployment</p>
     </footer>
 
-    <script src="https://unpkg.com/retell-client-js-sdk@0.2.1/dist/retell-client-js-sdk.js"></script>
+    <script type="module">
+        import { RetellWebClient } from "https://cdn.jsdelivr.net/npm/retell-client-js-sdk@2.0.7/+esm";
+        window.RetellWebClient = RetellWebClient;
+    </script>
     <script src="main.js"></script>
 </body>
 

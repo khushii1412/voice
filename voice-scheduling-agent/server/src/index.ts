@@ -71,7 +71,11 @@ app.post("/create-web-call", async (_req: Request, res: Response) => {
         const apiKey = process.env.RETELL_API_KEY;
         const agentId = process.env.RETELL_AGENT_ID || "agent_9bbda664892fff9658cd70850f";
 
+        console.log(`[WebCall] Attempting to create call for agent: ${agentId}`);
+        console.log(`[WebCall] API Key present: ${!!apiKey}`);
+
         if (!apiKey) {
+            console.error("[WebCall] Error: RETELL_API_KEY is missing in environment.");
             return res.status(500).json({ ok: false, error: "RETELL_API_KEY not set in environment" });
         }
 
@@ -84,10 +88,20 @@ app.post("/create-web-call", async (_req: Request, res: Response) => {
             body: JSON.stringify({ agent_id: agentId }),
         });
 
-        const data = await response.json();
+        const data = await response.json() as any;
+
+        if (!response.ok) {
+            console.error("[WebCall] Retell API error:", data);
+            return res.status(response.status).json({
+                ok: false,
+                error: data?.message || "Retell API request failed"
+            });
+        }
+
+        console.log("[WebCall] Successfully generated access token.");
         res.json(data);
     } catch (err: any) {
-        console.error("Web call creation failed:", err);
+        console.error("[WebCall] Critical failure:", err);
         res.status(500).json({ ok: false, error: err.message });
     }
 });

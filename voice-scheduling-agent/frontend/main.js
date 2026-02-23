@@ -58,7 +58,13 @@ async function startCall() {
 
         // 2. Initialize Retell Client
         if (!retellWebClient) {
-            retellWebClient = new RetellClient.RetellWebClient();
+            const ClientClass = window.RetellWebClient || (window.Retell && window.Retell.RetellWebClient) || (window.RetellClient && window.RetellClient.RetellWebClient);
+
+            if (!ClientClass) {
+                throw new Error('Retell SDK classes not found. Please refresh the page.');
+            }
+
+            retellWebClient = new ClientClass();
 
             retellWebClient.on('call_started', () => {
                 console.log('Call started');

@@ -4,8 +4,10 @@
 
 # Environment variables (contains API keys, OAuth secrets, tokens)
 **/.env
-**/.env.*
-**/.env.example
+**/.env.local
+**/.env.production
+**/.env.development
+# NOTE: .env.example is intentionally NOT ignored – it is a safe placeholder template
 
 # OAuth / credential files
 **/client_secret*.json
@@ -35,10 +37,11 @@ build/
 *.js.map
 
 # ========================================
-# OS / Editor files
+# OS / Editor / Screenshots
 # ========================================
 .DS_Store
 Thumbs.db
+screenshots/
 *.swp
 *.swo
 *~

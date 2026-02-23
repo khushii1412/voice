@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jordan | Voice Scheduling Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <nav>
+        <div class="logo">Jordan<span>AI</span></div>
+        <div class="system-status" id="systemStatus">
+            <span class="status-dot"></span>
+            System: <span id="statusText">Checking...</span>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <div class="badge">Next-Gen Voice Scheduling</div>
+                <h1>Meet Jordan: Your Executive Assistant.</h1>
+                <p>Jordan is a context-aware voice assistant that handles your scheduling precisely like a human
+                    executive assistant would—built for Khushi's Workspace.</p>
+                <div class="cta-group">
+                    <button class="btn btn-primary" id="talkToJordanBtn">Talk to Jordan</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='#how-it-works'">How it
+                        works</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="glass-card avatar-container">
+                    <img src="assets/jordan.png" alt="Jordan AI Assistant" class="avatar">
+                    <div class="avatar-label">Jordan · Online</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="feature-card glass-card">
+                <div class="icon">📅</div>
+                <h3>Google Calendar</h3>
+                <p>Real-time bidirectional sync with Google Calendar. Zero double-booking.</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="icon">🎙️</div>
+                <h3>Voice Intelligence</h3>
+                <p>Powered by Retell AI with ultra-low latency & natural speech.</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="icon">🧠</div>
+                <h3>Context Aware</h3>
+                <p>Calculates dates like "tomorrow" or "next Friday" with perfect precision.</p>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="how-it-works">
+            <h2 class="section-title">One Call. One Meeting Boxed.</h2>
+            <div class="steps">
+                <div class="step glass-card">
+                    <div class="step-num">01</div>
+                    <p>Initiate a call via our Retell Agent gateway.</p>
+                </div>
+                <div class="step glass-card">
+                    <div class="step-num">02</div>
+                    <p>Talk naturally to Jordan about your meeting needs.</p>
+                </div>
+                <div class="step glass-card">
+                    <div class="step-num">03</div>
+                    <p>Jordan confirms the slot and books it instantly on your calendar.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Jordan AI · Built for Khushi's Workspace Deployment</p>
+    </footer>
+
+    <script src="https://unpkg.com/retell-client-js-sdk@0.2.1/dist/retell-client-js-sdk.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>

@@ -2,12 +2,14 @@ import { getAuthUrl, exchangeCodeForTokens } from "./oauth";
 import retellRouter from "./retellWebhook";
 import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
+import path from "path";
 
 dotenv.config();
 
 const app = express();
 
 app.use(express.json({ limit: "1mb" }));
+app.use(express.static(path.join(__dirname, "../public")));
 
 // basic request log (put BEFORE routes)
 app.use((req: Request, _res: Response, next: NextFunction) => {
@@ -20,8 +22,8 @@ app.get("/health", (_req: Request, res: Response) => {
     res.json({ ok: true });
 });
 
-app.get("/", (_req, res) => {
-    res.send("Voice Scheduling Agent backend is running. Use /health or POST /retell/tool");
+app.get("/", (_req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
 app.get("/auth", (_req: Request, res: Response) => {
@@ -60,6 +62,33 @@ app.get("/oauth2callback", async (req: Request, res: Response) => {
     } catch (err: any) {
         console.error(err);
         res.status(500).json({ ok: false, error: { message: err?.message || "Callback failed" } });
+    }
+});
+
+// NEW: Create Web Call for Frontend Dashboard
+app.post("/create-web-call", async (_req: Request, res: Response) => {
+    try {
+        const apiKey = process.env.RETELL_API_KEY;
+        const agentId = process.env.RETELL_AGENT_ID || "agent_9bbda664892fff9658cd70850f";
+
+        if (!apiKey) {
+            return res.status(500).json({ ok: false, error: "RETELL_API_KEY not set in environment" });
+        }
+
+        const response = await fetch("https://api.retellai.com/v2/create-web-call", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify({ agent_id: agentId }),
+        });
+
+        const data = await response.json();
+        res.json(data);
+    } catch (err: any) {
+        console.error("Web call creation failed:", err);
+        res.status(500).json({ ok: false, error: err.message });
     }
 });
 

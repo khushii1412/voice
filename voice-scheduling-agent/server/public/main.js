@@ -48,8 +48,12 @@ async function startCall() {
         const response = await fetch(CREATE_WEB_CALL_URL, { method: 'POST' });
         const data = await response.json();
 
+        if (!response.ok || data.error) {
+            throw new Error(data.error || `Server error: ${response.status}`);
+        }
+
         if (!data.access_token) {
-            throw new Error('Failed to get access token');
+            throw new Error('Retell did not return an access_token');
         }
 
         // 2. Initialize Retell Client

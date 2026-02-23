@@ -83,7 +83,7 @@ async function startCall() {
 
     } catch (error) {
         console.error('Failed to start call:', error);
-        alert('Could not connect to Jordan. Ensure Retell API key is set in backend.');
+        alert(`Could not connect to Jordan: ${error.message}`);
         stopCallUI();
     }
 }

@@ -91,10 +91,11 @@ app.post("/create-web-call", async (_req: Request, res: Response) => {
         const data = await response.json() as any;
 
         if (!response.ok) {
+            const errorMsg = data?.message || "Retell API request failed";
             console.error("[WebCall] Retell API error:", data);
             return res.status(response.status).json({
                 ok: false,
-                error: data?.message || "Retell API request failed"
+                error: errorMsg
             });
         }
 

@@ -1,4 +1,5 @@
 import { getAuthUrl, exchangeCodeForTokens } from "./oauth";
+import { createEvent, listUpcomingEvents } from "./calendar";
 import retellRouter from "./retellWebhook";
 import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
@@ -103,6 +104,17 @@ app.post("/create-web-call", async (_req: Request, res: Response) => {
         res.json(data);
     } catch (err: any) {
         console.error("[WebCall] Critical failure:", err);
+        res.status(500).json({ ok: false, error: err.message });
+    }
+});
+
+// NEW: Fetch Upcoming Events for Dashboard
+app.get("/calendar-events", async (_req: Request, res: Response) => {
+    try {
+        const events = await listUpcomingEvents();
+        res.json({ ok: true, events });
+    } catch (err: any) {
+        console.error("[Calendar] Failed to list events:", err);
         res.status(500).json({ ok: false, error: err.message });
     }
 });

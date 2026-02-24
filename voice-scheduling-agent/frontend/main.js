@@ -105,12 +105,51 @@ function stopCall() {
     stopCallUI();
 }
 
+async function fetchUpcomingEvents() {
+    const listElement = document.getElementById('appointmentsList');
+    try {
+        const response = await fetch('/calendar-events');
+        const data = await response.json();
+
+        if (data.ok && data.events) {
+            if (data.events.length === 0) {
+                listElement.innerHTML = '<div class="no-events">No upcoming meetings scheduled.</div>';
+                return;
+            }
+
+            listElement.innerHTML = data.events.map(ev => {
+                const start = new Date(ev.start);
+                const dateStr = start.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+                const timeStr = start.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+
+                return `
+                    <div class="appointment-card glass-card">
+                        <div class="app-date">${dateStr}</div>
+                        <div class="app-info">
+                            <div class="app-title">${ev.summary}</div>
+                            <div class="app-time">${timeStr}</div>
+                        </div>
+                        <a href="${ev.link}" target="_blank" class="app-link">View</a>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            listElement.innerHTML = '<div class="error">Failed to load agenda.</div>';
+        }
+    } catch (error) {
+        console.error('Failed to fetch events:', error);
+        listElement.innerHTML = '<div class="error">Agenda sync error.</div>';
+    }
+}
+
 function stopCallUI() {
     const btn = document.getElementById('talkToJordanBtn');
     isCalling = false;
     btn.textContent = 'Talk to Jordan';
     btn.classList.remove('calling');
     btn.disabled = false;
+    // Refresh events after call
+    fetchUpcomingEvents();
 }
 
 // Event Listeners
@@ -118,4 +157,6 @@ document.getElementById('talkToJordanBtn').addEventListener('click', toggleCall)
 
 // Initial check
 checkSystemStatus();
+fetchUpcomingEvents();
 setInterval(checkSystemStatus, 30000);
+setInterval(fetchUpcomingEvents, 60000);

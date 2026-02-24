@@ -79,3 +79,32 @@ export async function createEvent(input: CreateEventInput) {
         timezone
     };
 }
+export async function listUpcomingEvents() {
+    const clientId = mustGetEnv("GOOGLE_CLIENT_ID");
+    const clientSecret = mustGetEnv("GOOGLE_CLIENT_SECRET");
+    const redirectUri = mustGetEnv("GOOGLE_REDIRECT_URI");
+    const refreshToken = mustGetEnv("GOOGLE_REFRESH_TOKEN");
+    const calendarId = process.env.GOOGLE_CALENDAR_ID || "primary";
+
+    const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
+    oauth2Client.setCredentials({ refresh_token: refreshToken });
+
+    const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+    const now = new Date().toISOString();
+    const resp = await calendar.events.list({
+        calendarId,
+        timeMin: now,
+        maxResults: 5,
+        singleEvents: true,
+        orderBy: "startTime",
+    });
+
+    return (resp.data.items || []).map(ev => ({
+        id: ev.id,
+        summary: ev.summary,
+        start: ev.start?.dateTime || ev.start?.date,
+        end: ev.end?.dateTime || ev.end?.date,
+        link: ev.htmlLink
+    }));
+}

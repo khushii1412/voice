@@ -104,16 +104,44 @@ The following must be set in your hosted environment (e.g., Render):
 
 ---
 
-## Verification Commands
+##  How to Test Jordan
+1. **Open the Dashboard:** Visit `https://voice-scheduling-agent-vu1d.onrender.com`.
+2. **Talk to Jordan:** Click the **"Talk to Jordan"** button.
+3. **Grant Mic Permissions:** Enable your microphone when prompted.
+4. **Schedule a Meeting:** 
+   - Say: "Hi Jordan, I'm [Your Name]. Can you book a 30-minute sync tomorrow at 2 PM?"
+   - Jordan will confirm the details.
+   - Once confirmed, she will book it on the calendar.
+5. **Verify:** Check your Google Calendar to see the event instantly created!
 
-**Health Check:**
-```bash
-curl https://voice-scheduling-agent-vu1d.onrender.com/health
-```
+---
 
-**Tool Test (Dry Run):**
-```bash
-curl -X POST https://voice-scheduling-agent-vu1d.onrender.com/retell/tool \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Alice","date":"2026-03-01","time":"10:00"}'
-```
+##  Calendar Integration
+Jordan uses the **Google Calendar API** with a secure **OAuth 2.0** flow:
+- **Offline Access:** The server uses an `offline` refresh token, meaning Jordan remains authorized to book meetings for you 24/7, even when you aren't logged in.
+- **Intelligent Timezones:** All calls use `Luxon` to handle timezone conversions (default: `Asia/Kolkata`), ensuring "2 PM" is booked exactly when you expect.
+- **Dynamic Context:** Every request sent to Jordan includes the current date, allowing her to understand relative terms like "next Monday" or "tomorrow."
+
+---
+
+##  Local Development (Optional)
+If you want to run this project on your own machine:
+1. **Clone the Repo:** `git clone <your-repo-url>`
+2. **Install Dependencies:** 
+   ```bash
+   cd voice-scheduling-agent/server
+   npm install
+   ```
+3. **Setup Environment:** Create a `.env` file based on `.env.example` and add your keys.
+4. **Run in Dev Mode:**
+   ```bash
+   npm run dev
+   ```
+5. **Expose to Retell:** Use a tool like **ngrok** to point Retell's webhook to your local machine (`localhost:3000/retell/tool`).
+
+---
+
+##  Verification Proof
+- **Live Status:** Verified via dashboard system check.
+- **Calendar Success:** [Attach your Screenshot/Loom here!]
+- **Backend Logs:** [Check your Render logs for the "Successfully generated access token" message.]
